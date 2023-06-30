@@ -1,23 +1,55 @@
-import logo from './logo.svg';
-import './App.css';
-
+import CategoryForm from "./components/Category";
+import Filter from "./components/Filter";
+import Navbar from "./components/Navbar";
+import ProductList from "./components/Productlist";
+import Products from "./components/Products";
+import { useEffect, useState } from "react";
 function App() {
+  const [categories,setCategories]=useState([]);
+  const [products ,setProducts] =useState([]);
+  const [filteredProducts,setFilteredProducts]=useState([]);
+  const [sort,setSort] = useState("oldest");
+  const [search,setSearch]=useState("");
+
+useEffect(()=>{
+
+},[products,sort,search])
+
+
+const sortHandler =(e)=>{
+  setSort(e.target.value)
+  const sortedProducts =[...products]
+  return sortedProducts.sort((a, b) => {
+      if (e.target.value === "newest") {
+        return new Date(a.createdAt) > new Date(b.createdAt) ? -1 : 1;
+      } else if (e.target.value === "oldest") {
+        return new Date(a.createdAt) > new Date(b.createdAt) ? 1 : -1;
+      }
+    });
+}
+
+const searchHandler =(e)=>{
+  setSearch(e.target.value)
+const value =e.target.value.trim().toLowerCase();
+const filteredProducts=products.filter((p)=>p.title.toLowerCase().includes(value));
+setFilteredProducts(filteredProducts)
+}
+
+
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+       <div className="bg-slate-800 min-h-screen">
+  <Navbar/>
+  <div className="container max-w-screen-sm mx-auto p-4">
+    <CategoryForm setCategories={setCategories}/>
+    <Products categories={categories} setProducts={setProducts}/>
+    <ProductList products={filteredProducts} setProducts={setProducts} categories={categories}/>
+    <Filter sort={sort} search={search} products={products} />
+  </div>
+       </div>
     </div>
   );
 }
