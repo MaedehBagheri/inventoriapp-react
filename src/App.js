@@ -12,32 +12,63 @@ function App() {
   const [search,setSearch]=useState("");
 
 useEffect(()=>{
+let result =products;
+result =filterSearchTitle(result);
+result =sortDate(result);
+setFilteredProducts(result)
+
 
 },[products,sort,search])
 
 
 const sortHandler =(e)=>{
   setSort(e.target.value)
-  const sortedProducts =[...products]
-  return sortedProducts.sort((a, b) => {
-      if (e.target.value === "newest") {
-        return new Date(a.createdAt) > new Date(b.createdAt) ? -1 : 1;
-      } else if (e.target.value === "oldest") {
-        return new Date(a.createdAt) > new Date(b.createdAt) ? 1 : -1;
-      }
-    });
+
 }
 
 const searchHandler =(e)=>{
-  setSearch(e.target.value)
-const value =e.target.value.trim().toLowerCase();
-const filteredProducts=products.filter((p)=>p.title.toLowerCase().includes(value));
-setFilteredProducts(filteredProducts)
+  setSearch(e.target.value.trim().toLowerCase());
+
+
 }
 
 
+const filterSearchTitle=(array)=>{
+ return array.filter((p)=> p.title.toLowerCase().includes(search))
+}
+
+const sortDate =(array)=>{
+  let sortedProducts =[...array]
+  return sortedProducts.sort((a, b) => {
+ if (sort === "newest") {
+        return new Date(a.createdAt) > new Date(b.createdAt) ? -1 : 1;
+      } else if (sort === "oldest") {
+        return new Date(a.createdAt) > new Date(b.createdAt) ? 1 : -1;
+      }
+
+    });
+}
+
+useEffect(()=>{
+if(categories.length){
+  localStorage.setItem("products" ,JSON.stringify(products));
+}
+},[products])
+
+useEffect(()=>{
+ if(products.length){
+  localStorage.setItem("categories" ,JSON.stringify(categories))
+ }
+  },[categories])
 
 
+
+useEffect(()=>{
+const savedProducts=JSON.parse(  localStorage.getItem("products")) || [];
+const savedCategories=JSON.parse(  localStorage.getItem("categories")) || [];
+setProducts(savedProducts);
+setCategories(savedCategories);
+},[])
 
   return (
     <div>
@@ -46,8 +77,13 @@ setFilteredProducts(filteredProducts)
   <div className="container max-w-screen-sm mx-auto p-4">
     <CategoryForm setCategories={setCategories}/>
     <Products categories={categories} setProducts={setProducts}/>
+    <Filter 
+    searchHandler={searchHandler}
+    sort={sort} 
+    search={search} 
+    products={products}
+     sortHandler={sortHandler}/>
     <ProductList products={filteredProducts} setProducts={setProducts} categories={categories}/>
-    <Filter sort={sort} search={search} products={products} />
   </div>
        </div>
     </div>

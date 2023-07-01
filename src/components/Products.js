@@ -5,7 +5,7 @@ const Products =({categories,setProducts})=>{
     const[productsFormData,setproductsFormData]=useState({
         title:"",
         quantity:0,
-        category:""
+        categoryId:"",
     })
 
 
@@ -16,7 +16,7 @@ const addNewProduct=(e)=>{
         id: new Date().getTime()
         }
         setProducts((prevState)=> [...prevState,newProduct]);
-       setproductsFormData({title:'',quantity:"",categoryId:""})
+       setproductsFormData({title:"",quantity:"",categoryId:""})
 }
 
     const changeHandler=(e)=>{
@@ -37,17 +37,18 @@ const addNewProduct=(e)=>{
           <div>
             <label htmlFor="product-quantity" className="block mb-1 text-slate-400">quantity</label>
             <input className="bg-transparent rounded-xl border border-slate-500 text-slate-400 w-full md:w-auto"
-        value={productsFormData.quantity}  onChange={changeHandler}    type="number" name="product-quantity" id="quantity"/>
+        value={productsFormData.quantity}  onChange={changeHandler}    type="number" name="quantity" id="quantity"/>
           </div>
           <div>
             <label htmlFor="product-category" className="block mb-1 text-slate-400">category</label>
-            <select name="category" id="product-category"value={productsFormData.categoryId}  onChange={changeHandler}
+            <select name="categoryId" value={productsFormData.categoryId}  onChange={changeHandler}
               className="bg-transparent text-slate-400 rounded-xl w-full">
                 <option className="bg-slate-500 text-slate-300" value="">{categories.title}</option>
-                {categories.map(c=>{
-return    <option key={c.id} className="bg-slate-500 text-slate-300" value="">
+                {categories.map((c)=>{
+      return <option  key={c.id}  className="bg-slate-500 text-slate-300" value={c.id}>
     {c.title}
 </option>
+
                 })}
             </select>
           </div>

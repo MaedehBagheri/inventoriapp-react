@@ -18,11 +18,9 @@ setCategoryFormData({...categoryFormData,[name]:value});
 
 const addNewCategoryHandler=(e)=>{
     e.preventDefault();
-    const newCategory ={...categoryFormData,createdAt: new Date().toISOString(),
-    id: new Date().getTime()
-    }
+    const newCategory ={...categoryFormData,createdAt :new Date().toISOString(),id: new Date().getTime()}
     setCategories((prevState)=> [...prevState,newCategory]);
-    setCategoryFormData({title:'',description:""})
+    setCategoryFormData({title:"",description:""})
 }
 
     return(
@@ -54,7 +52,8 @@ const addNewCategoryHandler=(e)=>{
             </div>
           </form>
         </div>
-       <button onClick={()=> setIsShow((prevState) => !prevState)} className={`text-slate-600 text-lg mb-4 font-medium ${isShow && "hidden"}`}>
+       <button onClick={()=> setIsShow((prevState) => !prevState)} 
+       className={`text-slate-600 text-lg mb-4 font-medium ${isShow && "hidden"}`}>
         Add new category ?
        </button>
       </section>
